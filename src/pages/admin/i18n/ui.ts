@@ -6,7 +6,7 @@ export const languages = {
     es: 'Español',
 };
 
-export const defaultLang = Config.default_languaje;
+export const defaultLang = Config.default_language;
 
 export const ui = {
     en: {

@@ -1,8 +1,10 @@
 import mysql from "mysql";
+import {Config} from "../../settings.js";
+
 const create_default_user = async () => {
-    const res = await dbQuery(`SELECT * from user;`);
+    const res = await dbQuery(`SELECT * from User;`);
     console.log(await res)
-    await dbQuery(`INSERT INTO user (name, email, password) VALUES ('ponny', 'contact@thisisaltawebs.com', '1234');`);
+    await dbQuery(`INSERT INTO User (name, email, password) VALUES ('ponny', 'contact@thisisaltawebs.com', '1234');`);
     return console.log('Completed Data Base with Default User.')
 }
 
@@ -40,10 +42,11 @@ try {
 
 function dbQuery(databaseQuery) {
     const connection = new mysql.createConnection({
-        host: 'localhost',
-        database: 'altawebs_web',
-        user: 'root',
-        password: 'zLowy',
+        host: Config.db.host,
+        database: Config.db.database,
+        user: Config.db.user,
+        password: Config.db.password,
+        port: Config.db.port,
     });
 
     return new Promise(data => {

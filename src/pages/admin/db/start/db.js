@@ -1,11 +1,13 @@
 import mysql from 'mysql'
+import {Config} from '../../settings.js'
 
 export function dbQuery(databaseQuery) {
     const connection = new mysql.createConnection({
-        host: 'localhost',
-        database: 'altawebs_web',
-        user: 'root',
-        password: 'zLowy',
+        host: Config.db.host,
+        database: Config.db.database,
+        user: Config.db.user,
+        password: Config.db.password,
+        port: Config.db.port,
     });
 
     return new Promise(data => {

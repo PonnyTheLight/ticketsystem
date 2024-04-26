@@ -1,5 +1,6 @@
 import readline from "readline"
 import mysql from "mysql";
+import {Config} from '../../settings.js'
 
 const rl = readline.createInterface({
     input: process.stdin,
@@ -14,9 +15,9 @@ const create_default_user = async () => {
                 try {
 
 
-                    const res = await dbQuery(`SELECT * from user;`);
+                    const res = await dbQuery(`SELECT * from User;`);
                     console.log(await res)
-                    await dbQuery(`INSERT INTO user (name, email, password) VALUES ('${name}', '${email}', '${password}');`);
+                    await dbQuery(`INSERT INTO User (name, email, password) VALUES ('${name}', '${email}', '${password}');`);
                 } catch (err) {
                     console.log(err)
                 }
@@ -65,10 +66,11 @@ try {
 
 function dbQuery(databaseQuery) {
     const connection = new mysql.createConnection({
-        host: 'localhost',
-        database: 'altawebs_web',
-        user: 'root',
-        password: 'zLowy',
+        host: Config.db.host,
+        database: Config.db.database,
+        user: Config.db.user,
+        password: Config.db.password,
+        port: Config.db.port,
     });
 
     return new Promise(data => {
