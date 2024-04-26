@@ -13,6 +13,7 @@ interface Ticket {
 
 const { id } = Astro.params;
 const cookies_response = Astro.cookies.get('User');
+if (!cookies_response) return Astro.redirect('/sesion/login/')
 const cookies = JSON.parse(cookies_response.value)
 
 const event_response =
