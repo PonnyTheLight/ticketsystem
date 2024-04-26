@@ -1,0 +1,243 @@
+---
+
+import type { LanguageKeys} from "../../@types/lang";
+import Main from "../../layouts/Main.astro";
+import {dbQuery} from "../../db/start/db";
+import {Config} from './settings'
+
+import { getLangFromUrl, useTranslations } from "../../i18n/utils";
+
+const lang : "en" | "es" = getLangFromUrl(Astro.url);
+let t
+function setLanguage(lang: "en"|"es") {
+    t = useTranslations(lang);
+}
+setLanguage(lang)
+
+let api_key = import.meta.env.PUBLIC_API_KEY ?? process.env.PUBLIC_API_KEY
+console.log("APIKEY: " + api_key)
+
+const can_create = Config.can_create
+
+let values = await dbQuery(`SELECT * from Settings;`);
+(async () => {
+
+    values.forEach((v) => {
+        console.log(v.name)
+    })
+})()
+---
+
+<link rel="stylesheet" type="text/css" href="/ponnyadmin/css/Settings_Light.css">
+
+<Main title="PonnyAdmin | Settings">
+    <div class="maindiv_settings">
+        <h1>{t("panel.settings")}</h1>
+
+        <p class="successmessage" hidden></p>
+        <p class="errormessage" hidden></p>
+
+        {can_create ? <div class="">
+            <div class="creatediv" id="create">
+                    <h3>{t("panel.settings.Create_Record")}: </h3>
+                    <div class="grid">
+                        <div class="createfield">
+                            <p class="createfield-title">{t("panel.settings.Name")}:</p>
+                            <input
+                                    id="nameValue"
+                                    type="text"
+                                    class="settingoption"
+                                    name="createname"
+                            />
+                        </div>
+                        <div class="createfield">
+                            <p class="createfield-title">{t("panel.settings.Type")}:</p>
+                            <select class="settingoption" id="typeValue">
+                                <option value="int_value">{t("panel.settings.Integer")}</option>
+                                <option value="float_value">{t("panel.settings.Float")}</option>
+                                <option value="string_value">{t("panel.settings.String")}</option>
+                                <option value="decimal_value">{t("panel.settings.Decimal")}</option>
+                                <option value="bool_value">{t("panel.settings.Boolean")}</option>
+                                <option value="date_value">{t("panel.settings.Date")}</option>
+                                <option value="time">{t("panel.settings.Time")}</option>
+                            </select>
+                        </div>
+                        <div class="createfield">
+                            <p class="createfield-title">{t("panel.settings.Value")}:</p>
+                            <input
+                                    id='createValue'
+                                    type="text"
+                                    class="settingoption"
+                                    name="createvalue"
+                            />
+                        </div>
+                    </div>
+                    <div class="buttons">
+                        <a class="createBtn">{t("panel.settings.Create")}</a>
+                    </div>
+            </div>
+        </div> : ""}
+
+        <div class="">
+            {values ? values.map((v) => (
+                   <div>
+                       <button class="opensetting" id=`${v.id}`>{v.name}</button>
+                       <div class="settingdiv" id={v.id} hidden>
+                               <div class="grid">
+                                   <div class="settingfield">
+                                       <p class="settingfield-title">{t("panel.settings.Type")}:</p>
+                                       <p class="pvalor">{
+                                           v.string_value ? t("panel.settings.String") : v.int_value ? t("panel.settings.Integer") : v.bool_value == 0 || v.bool_value ? t("panel.settings.Boolean") : v.float_value ? t("panel.settings.Float") : v.decimal_value ? t("panel.settings.Decimal") : v.date_value ? t("panel.settings.Date") : v.time_value ? t("panel.settings.Time") : ""
+                                       }</p>
+                                   </div>
+                                   <div class="settingfield">
+                                       <p class="settingfield-title">{t("panel.settings.Value")}:</p>
+                                       <input type="text" class="settingoption" id={`settingOption-${v.id}`} value={
+                                           v.string_value ? v.string_value : v.int_value ? v.int_value : v.bool_value == 0 || v.bool_value ? (v.bool_value == 0 ? "False" : "True") : v.float_value ? v.float_value : v.decimal_value ? v.decimal_value : v.date_value ? v.date_value : ""
+                                       } />
+                                   </div>
+                               </div>
+                               <div class="buttons">
+                                   <a class="updateBtn" id={v.id} data-update={
+                                       v.string_value ? "string_value" : v.int_value ? "int_value" : v.bool_value == 0 || v.bool_value ? "bool_value" : v.float_value ? "float_value" : v.decimal_value ? "decimal_value" : v.date_value ? "date_value" : ""
+                                   }>{t("panel.settings.Update")}</a>
+                                   <a class="deleteBtn" id={v.id}>{t("panel.settings.Delete")}</a>
+                               </div>
+                       </div>
+                   </div>
+            )) : ""}
+        </div>
+    </div>
+</Main>
+
+<script>
+
+    const successMessage = document.querySelector(".successmessage")
+    const errorMessage = document.querySelector(".errormessage")
+
+    if (document.cookie) {
+        console.log(document.cookie)
+        const cookies = document.cookie.split(';')
+        for (let i in cookies) {
+            const split = cookies[i].split('=')
+
+            if (split[0] === " success" && split[1] != "") {
+                console.log("SI PASA")
+                successMessage.textContent = split[1]
+                successMessage.toggleAttribute('hidden')
+                errorMessage.setAttribute('hidden', 'hidden')
+                document.cookie = "success=;path=/"
+            } else if (split[0] == " error" && split[1] != "") {
+                errorMessage.textContent = split[1]
+                errorMessage.toggleAttribute('hidden')
+                successMessage.setAttribute('hidden', 'hidden')
+                document.cookie = "error=;path=/"
+            } else {
+                errorMessage.setAttribute('hidden', 'hidden')
+                successMessage.setAttribute('hidden', 'hidden')
+            }
+
+        }
+    }
+
+    document.querySelectorAll(".opensetting").forEach((e) => {
+        console.log("aa");
+        e.addEventListener("click", () => {
+            let id = e.id;
+            const settingdiv = document.querySelectorAll(".settingdiv");
+
+            settingdiv.forEach((ee) => {
+                if (id == ee.id) {
+                    ee.toggleAttribute("hidden");
+                }
+            });
+        });
+    });
+
+    document.querySelectorAll(".createBtn").forEach((e : ElementInterface) => {
+        e.addEventListener('click', async (ee) => {
+            const createValue : ElementInterface = document.querySelector(`#createValue`)
+            const nameValue : ElementInterface = document.querySelector(`#nameValue`)
+            const type : ElementInterface = document.querySelector(`#typeValue`)
+            const res = await fetch('/admin/api/db/create/', {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${import.meta.env.PUBLIC_API_KEY ?? process.env.PUBLIC_API_KEY}`,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    "CREATETYPE": type.value,
+                    "NAME": nameValue.value,
+                    "VALUE": createValue.value
+                })
+            })
+
+            const response = await res.json()
+
+            if (response) {
+                console.log(response)
+                const status = response.status
+                console.log(status)
+                if (status) {
+                    document.cookie = `success=Created value with name ${nameValue.value} successfully.;path=/`
+                } else {
+                    document.cookie = `error=Value with name ${nameValue.value} already exist in our DB.;path=/`
+                }
+            }
+            location.reload()
+        })
+    })
+
+    document.querySelectorAll(".updateBtn").forEach((e: ElementInterface) => {
+        e.addEventListener('click', async (ee : TargetInterface) => {
+            const update = e.dataset.update
+            const targetID = ee.target.id
+            if (ee.target.id) {
+                const settingupdate : ElementInterface = document.querySelector(`#settingOption-${ee.target.id}`)
+                const res = await fetch('/admin/api/db/update/', {
+                    method: "POST",
+                    headers: {
+                        "Authorization": `Bearer ${import.meta.env.PUBLIC_API_KEY ?? process.env.PUBLIC_API_KEY}`,
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        "id": ee.target.id,
+                        "VALUETOUPDATE": update,
+                        "VALUE": settingupdate.value
+                    })
+                })
+
+                location.reload()
+
+                document.cookie = `success=Updated value with id ${ee.target.id} successfully.;path=/`
+            } else {
+                console.log("Element id not exist.")
+            }
+        })
+    })
+
+    document.querySelectorAll(".deleteBtn").forEach((e : ElementInterface) => {
+        e.addEventListener('click', async (ee : TargetInterface) => {
+            const targetID = ee.target.id;
+            if (targetID) {4
+                console.log(import.meta.env.PUBLIC_API_KEY)
+                const res = await fetch('/admin/api/db/delete/', {
+                    method: "POST",
+                    headers: {
+                        "Authorization": `Bearer ${import.meta.env.PUBLIC_API_KEY ?? process.env.PUBLIC_API_KEY}`,
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        "id": targetID
+                    })
+                })
+
+                location.reload()
+
+                document.cookie = `success=Deleted value with id ${targetID} successfully.;path=/`
+            } else {
+                console.log("Element id not exist.")
+            }
+        })
+    })
+</script>

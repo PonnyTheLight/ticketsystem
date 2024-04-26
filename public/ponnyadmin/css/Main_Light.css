@@ -1,0 +1,117 @@
+/* IMPORTADO DE FONTFAMILY */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+/* AJUSTES GENERALES DEL ESTILO */
+:root {
+    --main-bg-color: white;
+    --second-bg-color: #d1d5db;
+    --main-btn-bg: #6366f1;
+    --main-btn-delete-bg: red;
+    --main-div-link-bg: #8587ea;
+    --sidebar-btn-bg: #9ca3af;
+    --text-color: black;
+    font-family: "Roboto", sans-serif;
+
+}
+
+/* EMPIEZA EL STILE DEL APARTADO GENERAL */
+
+body {
+    background-color: var(--main-bg-color);
+    padding: 0px;
+    margin: 0px;
+}
+
+body #Sidebar {
+    height: 100vh;
+    width: 15rem;
+    box-shadow: 10px 0 5px -2px var(--second-bg-color);
+    visibility: visible;
+}
+
+body #Sidebar .titlediv {
+    text-align: center;
+    padding: 0.5rem;
+}
+
+body #Sidebar .titlediv h1 {
+    color: var(--main-btn-bg);
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+body #Sidebar .titlediv h3 {
+    color: var(--sidebar-btn-bg);
+    font-size: 1rem;
+}
+
+body #Sidebar .titlediv h3 {
+    color: var(--sidebar-btn-bg);
+    font-size: 1rem;
+}
+
+body #Sidebar .ul-list {
+    margin-top: 0px;
+    list-style: none;
+    text-align: center;
+    padding: 1rem;
+}
+
+body #Sidebar .ul-item {
+    margin-top: 0.5rem;
+}
+
+body #Sidebar .ul-list .ul-link {
+    display: block;
+    width: 100%;
+    padding: 0.2rem;
+    border-radius: 1rem;
+    text-decoration: none;
+    color: var(--text-color);
+}
+
+body #Sidebar .ul-list .ul-link:hover {
+    background-color: var(--second-bg-color);
+}
+
+.maindiv {
+    display: flex;
+}
+
+.maindiv .content {
+    padding: 2rem;
+    width: 100%;
+}
+
+body .btnopendiv {
+    display: flex;
+    justify-content: end;
+}
+
+body .openbtn {
+    visibility: hidden;
+}
+
+body nav .languageChanger {
+    display: grid;
+    justify-content: center;
+}
+body nav .languageChanger label {
+    margin-bottom: 0.3rem;
+}
+
+/* EMPIEZA EL CAMBIO POR SCREEN SIZE PARA EL ALIGN DEL CONTENIDO Y LA SIDEBAR */
+@media screen and (max-width: 480px) {
+    body #Sidebar {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 12rem;
+        background-color: white;
+        visibility: hidden;
+    }
+
+    body .openbtn {
+        visibility: visible;
+    }
+}

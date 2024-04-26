@@ -1,0 +1,53 @@
+---
+import Main from "../../../../layouts/Main.astro";
+import {dbQuery} from "../../../../db/start/db";
+import {Config} from '../../../../settings'
+import multer from 'multer'
+import fs from "fs";
+
+const schema = Config.db_schema
+const exist_entries = await dbQuery(`SELECT COUNT(*)
+FROM information_schema.tables 
+WHERE table_schema = '${schema}' 
+AND table_name = 'Blog_Entries';`)
+
+const {id} = Astro.params
+const entry = await dbQuery(`SELECT * FROM Blog_Entries WHERE id=${id};`)
+console.log(entry)
+
+const expressURI = import.meta.env.PUBLIC_EXPRESS_URI
+
+if (Astro.request.method == "POST") {
+    const formData = await Astro.request.formData()
+    const bannerFile = formData.get('bannerFile')
+    console.log(bannerFile)
+
+    if (bannerFile) {
+        const data = new FormData()
+
+        console.log("aaa")
+    }
+}
+---
+
+<Main title="PonnyAdmin | Entrie">
+    {entry[0] ? <h1>Si</h1> : ""}
+
+    <div class="blogEntryDiv">
+            <div class="settingField">
+                <form method="POST" enctype="multipart/form-data" action=`${expressURI}/upload`>
+                <label for="fileBanner">Banner: </label>
+                <input type="file" id="fileBanner" name="file" accept=".png, .jpg, .jpeg, .svg">
+                <input type="submit" value="Save" id="SubmitBtn" />
+                </form>
+            </div>
+            <h1>{entry[0].title}</h1>
+            <div class="content">
+                <p>{entry[0].content}</p>
+            </div>
+    </div>
+</Main>
+
+<script>
+
+</script>

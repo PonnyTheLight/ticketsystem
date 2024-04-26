@@ -1,0 +1,53 @@
+:root {
+    --main-bg-color: white;
+    --second-bg-color: #d1d5db;
+    --main-btn-bg: #6366f1;
+    --sidebar-btn-bg: #9ca3af;
+    --text-color: black;
+    font-family: "Roboto", sans-serif;
+}
+
+.logindiv h1 {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.logindiv .inputsdiv {
+    display: block;
+    margin: auto;
+    width: 50%;
+}
+
+.logindiv .inputitem input {
+    width: 100%;
+    padding: 0.5rem;
+    border-radius: 0.2rem;
+    border: none;
+}
+
+.btndiv {
+    display: flex;
+    justify-content: center;
+}
+
+.btndiv .btnsubmit {
+    background-color: var(--main-btn-bg);
+    padding: 0.5rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    border-radius: 0.5rem;
+    border: none;
+    color: white;
+    margin-top: 0.5rem;
+}
+
+.btndiv .btnsubmit:hover {
+    cursor: pointer;
+}
+
+@media screen and (max-width: 480px) {
+    .logindiv .inputsdiv {
+        margin: auto;
+        width: 90%;
+    }
+}

@@ -1,0 +1,24 @@
+{
+  "name": "ticketsystem",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/node": "^8.2.5",
+    "@astrojs/tailwind": "^5.1.0",
+    "astro": "^4.6.3",
+    "fs": "^0.0.1-security",
+    "gettext-parser": "^8.0.0",
+    "mysql": "^2.18.1",
+    "tailwindcss": "^3.4.3"
+  },
+  "devDependencies": {
+    "@types/mysql": "^2.15.26"
+  }
+}

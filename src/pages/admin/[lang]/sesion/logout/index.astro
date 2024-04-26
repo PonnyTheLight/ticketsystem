@@ -1,0 +1,14 @@
+---
+import Layout from "../../../layouts/Sesion.astro";
+try {
+    const res = Astro.cookies.delete("AdminUser", {
+        path: "/admin/",
+    });
+
+    return Astro.redirect("/admin/");
+} catch (err) {
+    if (err instanceof Error) {
+        console.log(err.message);
+    }
+}
+---

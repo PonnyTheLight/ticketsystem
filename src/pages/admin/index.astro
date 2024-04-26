@@ -1,0 +1,12 @@
+---
+import Main from "./layouts/Main.astro";
+import { Config } from "./settings";
+
+if (!Astro.cookies.has("AdminUser")) {
+    return Astro.redirect(`/admin/${Config.default_languaje}/sesion/login/`);
+}
+
+return Astro.redirect(`/admin/${Config.default_languaje}/`);
+---
+
+<Main title="PonnyAdmin | Main" />

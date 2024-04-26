@@ -1,0 +1,40 @@
+.blog_grid {
+    display: grid;
+    grid-template-columns: auto auto;
+}
+
+a {
+    text-decoration: none;
+    color: var(--text-color);
+}
+
+.entryData {
+    padding: 1rem;
+    display: grid;
+    grid-template-columns: auto auto;
+    margin: 0.5rem 0.5rem;
+    align-items: center;
+    background-color: var(--second-bg-color);
+    justify-content: center;
+    border-radius: 1rem;
+    text-align: center;
+}
+
+.entryData img {
+    justify-self: center;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    width: 80%;
+    height: 5rem;
+    object-fit: cover;
+}
+
+@media screen and (max-width: 480px) {
+    .blog_grid {
+        grid-template-columns: auto;
+    }
+
+    .entryData {
+        grid-template-columns: auto;
+    }
+}

@@ -1,0 +1,114 @@
+---
+import type { GetStaticPaths } from "astro";
+
+interface Props {
+    title: string;
+}
+
+const { title } = Astro.props;
+
+import { Config } from "../settings";
+
+export interface LanguageKeys {
+    en: string;
+    es: string;
+}
+
+import { getLangFromUrl, useTranslations } from "../i18n/utils";
+import { languages } from "../i18n/ui";
+import {options} from "@astrojs/check/dist/options";
+
+const lang = getLangFromUrl(Astro.url);
+let t
+function setLanguage(lang: "en" | "es") {
+    t = useTranslations(lang);
+}
+setLanguage(lang)
+console.log(t("nav.version"));
+
+const generalsettings = Config.modules_enabled.general_settings
+---
+
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="description" content="Astro description" />
+        <meta name="viewport" content="width=device-width" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
+        <meta name="generator" content={Astro.generator} />
+        <title>{title}</title>
+        <link rel="stylesheet" href="/ponnyadmin/css/Main_Light.css" />
+    </head>
+    <body>
+        <div class="maindiv">
+            <nav id="Sidebar">
+                <div class="titlediv">
+                    <h1>PonnyAdmin</h1>
+                    <h3>{t("nav.version")}: {Config.version}</h3>
+                </div>
+
+                <ul class="ul-list">
+                    <li class="ul-item">
+                        <a class="ul-link" href=`/admin/${lang}/`
+                            >{t("nav.dashboard")}</a
+                        >
+                    </li>
+                    {generalsettings ? <li class="ul-item">
+                        <a class="ul-link" href=`/admin/${lang}/settings/`
+                            >{t("nav.settings")}</a
+                        >
+                    </li> : ''}
+
+                    {Config.modules_enabled.blog ?
+                            <hr>
+                            <li class="ul-item">
+                                <a class="ul-link" href=`/admin/${lang}/blog/entries/`
+                                >{t("nav.blog.entries")}</a
+                                >
+                            </li>
+                    : ""}
+                </ul>
+
+                {languages ? <div class="languageChanger">
+                    <label for="languageSelect">Language: </label>
+                    <select id="languageSelect">
+                        {Object.entries(languages).map((i) => (
+                            lang == i[0] ? <option id={i[0]} selected>{i[1]}</option> : <option id={i[0]}>{i[1]}</option>
+                        ))}
+                    </select>
+                </div> : ""}
+            </nav>
+
+
+            <div class="content">
+                <div class="btnopendiv">
+                    <button id="Openbtn" class="openbtn"> Open </button>
+                </div>
+                <slot />
+            </div>
+        </div>
+    </body>
+</html>
+
+<script>
+    var tt = document.getElementById('Sidebar')
+    var btt = document.getElementById('Openbtn') 
+
+    btt.addEventListener('click', () =>  {
+        
+        if (tt.style.visibility == "hidden" && tt.style.visibility) {
+            tt.style.visibility = "visible"
+        } else if (tt.style.visibility != "hidden" && tt.style.visibility) {
+            tt.style.visibility = "hidden"
+        } else {
+            tt.style.visibility = "visible"
+        }
+    });
+
+    const split = document.location.href.split("/")
+    console.log(split)
+    document.querySelector("#languageSelect").addEventListener('change', (e) => {
+        const select = document.querySelector("#languageSelect") as HTMLSelectElement
+        document.location.href = `/admin/${select.options[select.selectedIndex].id}`
+    })
+</script>

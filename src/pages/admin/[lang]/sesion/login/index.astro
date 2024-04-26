@@ -1,0 +1,136 @@
+---
+import Layout from "../../../layouts/Sesion.astro";
+import mysql from "mysql";
+import {dbQuery} from '../../../db/start/db'
+
+interface QueryResponse {
+    length: number;
+    name: string;
+    admin: boolean;
+}
+
+var usernameexists = false;
+var emailexists = false;
+var passwrong = false;
+var dataexists = false;
+var data = new FormData() as FormData;
+
+if (Astro.request.method === "POST") {
+    try {
+        data = await Astro.request.formData();
+        const name = data.get("username") as string;
+        const password = data.get("password") as string;
+
+        if (!name || !password) return dataexists = true
+        const response =
+            await dbQuery(`SELECT * FROM user WHERE name='${name}' and password='${password}';`);
+
+        console.log(response)
+        console.log(response.length)
+        if (response.length > 0) {
+            console.log(response[0].name);
+            console.log('YESSSSSSSSSSSSS')
+            if (response[0].admin) {
+                Astro.cookies.set(
+                    "AdminUser",
+                    {
+                        username: name,
+                        email: response[0].email ? response[0].email : null,
+                        pk: response[0].id,
+                    },
+                    { path: "/admin/" },
+                );
+                return Astro.redirect("/admin/");
+            } else {
+                console.error('Este usuario no es administrativo.')
+            }
+        } else {
+            console.error('Este usuario o esta contraseña no existen.')
+        }
+    } catch (error) {
+        if (error instanceof Error) {
+            console.error(error.message);
+        }
+    }
+}
+
+---
+
+<Layout title="Alba Blog | Register">
+    <div class="logindiv">
+        <h1 class="title">¿Quieres Iniciar Sesión?</h1>
+        <form method="POST">
+            <div class="inputsdiv">
+                <div class="inputitem">
+                    <label
+                        class=""
+                        for="username">Nombre de Usuario o Email:</label
+                    >
+                    <input
+                        type="text"
+                        class=""
+                        placeholder="Escribe tu nombre de usuario o email."
+                        id="username"
+                        name="username"
+                        value={(data.get("username") as string)
+                            ? (data.get("username") as string)
+                            : ""}
+                        required
+                    />
+                    {
+                        usernameexists ? (
+                            <p class="text-red-500">
+                                Este nombre de usuario ya existe. Prueba con
+                                otro.
+                            </p>
+                        ) : (
+                            ""
+                        )
+                    }
+                    {
+                        dataexists ? (
+                                <p class="text-red-500">
+                                    Debes introducir los datos para continuar.
+                                </p>
+                        ) : (
+                            ""
+                        )
+                    }
+                </div>
+
+                <div class="inputitem">
+                    <label
+                        for="password"
+                        class=""
+                        >Contraseña:</label
+                    >
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        class=""
+                        placeholder="•••••••••"
+                        value={(data.get("password") as string)
+                            ? (data.get("password") as string)
+                            : ""}
+                        required
+                    />
+                    {
+                        passwrong ? (
+                            <p class="text-red-500">
+                                La contraseña no es correcta, prueba otra o
+                                restablecela ahora.
+                            </p>
+                        ) : (
+                            ""
+                        )
+                    }
+                </div>
+            </div>
+
+            <div class="btndiv">
+                <input type="submit" class="btnsubmit" />
+            </div>
+        </form>
+    </div>
+</Layout>

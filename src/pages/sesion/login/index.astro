@@ -1,0 +1,66 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import {dbQuery} from '../../admin/db/start/db'
+
+let nodata = false
+
+if (Astro.request.method == "POST") {
+    const data = await Astro.request.formData();
+    const username = data.get('username')
+    const password = data.get('pass')
+
+    if (!username || !password) {
+        nodata = true
+    }
+
+    if (!nodata) {
+        const user_response =
+            await dbQuery(`SELECT * FROM user WHERE name='${username}' AND password='${password}';`);
+        const user = user_response[0]
+        if (user) {
+            console.log("EXIST")
+            console.log(user)
+            Astro.cookies.set(
+                "User",
+                {
+                    username: username,
+                    email: user.email ? user.email : null,
+                    pk: user.id,
+                },
+                { path: "/" },
+            );
+            return Astro.redirect('/')
+        }
+    }
+}
+
+---
+
+<Layout title="Ticket System | Login">
+    <main class="lg:mx-20">
+        <div class="lg:mx-auto h-[80vh] grid items-center">
+            <div class="md:w-[50%] mx-auto">
+                { nodata ? <p class="bg-red-500 rounded-full p-1 px-4 text-white text-center">Por favor, rellena los datos y inténtelo de nuevo.</p> : ""}
+                <h1 class="text-2xl my-5 md:my-3">INICIAR SESIÓN</h1>
+                <form method="POST">
+                    <div class="grid w-full my-3">
+                        <label for="username" class="text-md">Nombre de Usuario: </label>
+                        <input type="text" id="username" name="username" class="rounded-lg p-1 px-5" placeholder="Escribe tú nombre de usuario.">
+                    </div>
+
+                    <div class="grid w-full my-3">
+                        <label for="password" class="text-md">Contraseña: </label>
+                        <input type="text" id="password" name="pass" class="rounded-lg p-1 px-5" placeholder="Escribe tú contraseña.">
+                    </div>
+
+                    <div class="grid md:grid-cols-2">
+                        <a href="#" class="my-2 text-blue-600 hover:border-b border-blue-500">¿No tienes cuenta? REGISTRATE</a>
+                        <a href="#" class="my-2 md:text-end text-blue-600 hover:border-b border-blue-500">Olvide mi contraseña.</a>
+                    </div>
+
+                    <input type="submit" class="my-2 bg-blue-500 p-2 px-4 rounded-lg text-white hover:cursor-pointer" value="Iniciar Sesión">
+                </form>
+            </div>
+        </div>
+    </main>
+</Layout>

@@ -1,0 +1,50 @@
+---
+
+import Main from "../../../layouts/Main.astro";
+import {dbQuery} from "../../../db/start/db";
+import {Config} from '../../../settings'
+
+
+const schema = Config.db_schema
+let entries;
+const exist_entries = await dbQuery(`SELECT COUNT(*)
+FROM information_schema.tables 
+WHERE table_schema = '${schema}' 
+AND table_name = 'Blog_Entries';`)
+
+if (Object.entries(exist_entries[0])[0][1] as number > 0) {
+    entries = await dbQuery(`SELECT * FROM Blog_Entries;`)
+}
+---
+
+<link rel="stylesheet" type="text/css" href="/ponnyadmin/css/blog/Main.css">
+
+<Main title="PonnyAdmin | Entries">
+    <div class="blog_grid">
+        {entries ? entries.map((i) => (
+                <a href=`${i.id}/`>
+                    <div class="entryDiv">
+                        <div class="entryData">
+                            <img src=`${i.banner}` alt="Banner">
+                            <h3>{i.title}</h3>
+                        </div>
+                    </div>
+                </a>
+        )) : ""}
+
+        {entries ? entries.map((i) => (
+                <a href=`${i.id}/`>
+                    <div class="entryDiv">
+                        <div class="entryData">
+                            <img src=`${i.banner}` alt="Banner">
+                            <h3>{i.title}</h3>
+                        </div>
+                    </div>
+                </a>
+        )) : ""}
+    </div>
+</Main>
+
+<script>
+
+</script>

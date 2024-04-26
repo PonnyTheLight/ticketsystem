@@ -1,0 +1,56 @@
+---
+import { ViewTransitions } from 'astro:transitions';
+
+interface Props {
+	title: string;
+}
+
+const { title } = Astro.props;
+
+const test = false
+const cookies = await Astro.cookies.get('User')
+let user;
+if (cookies) {
+	user = cookies
+}
+
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="description" content="Astro description" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/logos/LogoAltaWebs.svg" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{title}</title>
+
+		<ViewTransitions />
+	</head>
+	<body>
+		<nav class="shadow-sm shadow-gray-950 flex justify-between items-center px-10">
+			<a href="/"><img class="" src="/logos/LogoAltaWebs.svg" width="150" alt="PageLogo"></a>
+
+			{user ? <a href="#" class="p-1 px-5 border-b-2 border-gray-950">Mis Entradas</a>: <a href="/sesion/login/" class="p-1 px-10 bg-blue-500 text-white rounded-full">Login</a>}
+		</nav>
+
+		<div class="content min-h-screen">
+			<slot />
+		</div>
+
+		<footer class="bg-gray-100 p-4">
+			<p class="text-center">&copy; Copyright O-Clock. Powered by <a href="https://thisisaltawebs.com/" class="text-blue-700" target="_blank">AltaWebs</a></p>
+		</footer>
+	</body>
+</html>
+<style is:global>
+	@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+	@tailwind base;
+	@tailwind components;
+	@tailwind utilities;
+	:root {
+		font-family: 'Roboto', sans-serif;
+	}
+</style>

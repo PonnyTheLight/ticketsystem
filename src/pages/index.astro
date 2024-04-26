@@ -1,0 +1,22 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Card from '../components/Card.astro';
+import {dbQuery} from './admin/db/start/db'
+
+const events =
+    await dbQuery(`SELECT * FROM events;`);
+
+console.log(events)
+---
+
+<Layout title="Ticket System | O-Clock">
+    <main class="lg:mx-20 list-none">
+        {events ? events.map((e) => (
+                <Card href=`/event/${e.id}` title={e.name} img={e.img} desc={e.desc_value} active={e.active}></Card>
+        )) : "Not events"}
+    </main>
+</Layout>
+
+<style>
+
+</style>
