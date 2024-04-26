@@ -3,6 +3,7 @@ const create_default_user = async () => {
     const res = await dbQuery(`SELECT * from user;`);
     console.log(await res)
     await dbQuery(`INSERT INTO user (name, email, password) VALUES ('ponny', 'contact@thisisaltawebs.com', '1234');`);
+    return console.log('Completed Data Base with Default User.')
 }
 
 try {
