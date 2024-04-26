@@ -16,9 +16,9 @@ const cookies_response = Astro.cookies.get('User');
 const cookies = JSON.parse(cookies_response.value)
 
 const event_response =
-    await dbQuery(`SELECT * FROM events WHERE id='${id}';`);
+    await dbQuery(`SELECT * FROM Events WHERE id='${id}';`);
 const tickets_response =
-    await dbQuery(`SELECT * FROM tickets WHERE userid='${cookies.pk}' AND event_id='${id}';`);
+    await dbQuery(`SELECT * FROM Tickets WHERE userid='${cookies.pk}' AND event_id='${id}';`);
 
 const event = event_response[0]
 console.log(tickets_response)

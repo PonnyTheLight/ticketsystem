@@ -4,7 +4,7 @@ import Card from '../components/Card.astro';
 import {dbQuery} from './admin/db/start/db'
 
 const events =
-    await dbQuery(`SELECT * FROM events;`);
+    await dbQuery(`SELECT * FROM Events;`);
 
 console.log(events)
 ---

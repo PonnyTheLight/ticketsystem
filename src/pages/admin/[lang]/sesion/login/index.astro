@@ -23,7 +23,7 @@ if (Astro.request.method === "POST") {
 
         if (!name || !password) return dataexists = true
         const response =
-            await dbQuery(`SELECT * FROM user WHERE name='${name}' and password='${password}';`);
+            await dbQuery(`SELECT * FROM User WHERE name='${name}' and password='${password}';`);
 
         console.log(response)
         console.log(response.length)

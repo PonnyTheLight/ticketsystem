@@ -15,7 +15,7 @@ if (Astro.request.method == "POST") {
 
     if (!nodata) {
         const user_response =
-            await dbQuery(`SELECT * FROM user WHERE name='${username}' AND password='${password}';`);
+            await dbQuery(`SELECT * FROM User WHERE name='${username}' AND password='${password}';`);
         const user = user_response[0]
         if (user) {
             console.log("EXIST")
