@@ -12,10 +12,10 @@ const { href, img, title, desc, active } = Astro.props;
 
 <li class="link-card">
 	<div class="my-4 mx-auto bg-gray-200 max-w-[90%] lg:max-w-[60%] self-center" id="Card">
-		<img class="mb-2" transition:name="Card--Img" src={img} style="width: 900px; max-height: 200px; object-fit: cover" alt="EventImg">
+		<img class="mb-2" src={img} style="width: 900px; max-height: 200px; object-fit: cover" alt="EventImg">
 		<div class="p-5" id="CardContent">
-			<h1 transition:name="Card--Text" class="font-semibold mb-1">{title}</h1>
-			<p transition:name="Card--DescText" class="mb-3">{desc}</p>
+			<h1 class="font-semibold mb-1">{title}</h1>
+			<p class="mb-3">{desc}</p>
 			{
 				active ? <a href={href} class="px-4 py-2 bg-blue-500 rounded-full text-white">Comprar Entradas</a> : <a class="px-4 py-2 bg-gray-800 rounded-full text-white">Evento Cerrado</a>
 			}

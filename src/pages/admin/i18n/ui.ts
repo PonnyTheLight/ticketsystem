@@ -13,8 +13,11 @@ export const ui = {
         'nav.version': 'Version',
         'nav.dashboard': 'Dashboard',
         'nav.settings': 'Settings',
+        'nav.users': 'Users',
 
         'nav.blog.entries': 'Entries',
+
+        'nav.tickets.general': 'General',
 
         'panel.settings': 'Settings',
         'panel.settings.Create_Record': 'Create Record',
@@ -31,6 +34,13 @@ export const ui = {
         'panel.settings.Boolean': 'Boolean',
         'panel.settings.Date': 'Data',
         'panel.settings.Time': 'Time',
+
+        'panel.tickets.general.Username': 'Username',
+        'panel.tickets.general.Email': 'Email',
+        'panel.tickets.general.Admin': 'Admin',
+        'panel.tickets.general.Worker': 'Worker',
+        'panel.tickets.general.Yes': 'Yes',
+        'panel.tickets.general.No': 'No',
     },
     es: {
         'nav.version': 'Versión',

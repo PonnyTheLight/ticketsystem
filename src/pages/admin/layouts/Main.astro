@@ -53,6 +53,11 @@ const generalsettings = Config.modules_enabled.general_settings
                             >{t("nav.dashboard")}</a
                         >
                     </li>
+                    <li class="ul-item">
+                        <a class="ul-link" href=`/admin/${lang}/users/`
+                        >{t("nav.users")}</a
+                        >
+                    </li>
                     {generalsettings ? <li class="ul-item">
                         <a class="ul-link" href=`/admin/${lang}/settings/`
                             >{t("nav.settings")}</a
@@ -67,6 +72,15 @@ const generalsettings = Config.modules_enabled.general_settings
                                 >
                             </li>
                     : ""}
+
+                    {Config.modules_enabled.ticket_system ?
+                            <hr>
+                            <li class="ul-item">
+                                <a class="ul-link" href=`/admin/${lang}/tickets/general/`
+                                >{t("nav.tickets.general")}</a
+                                >
+                            </li>
+                        : ""}
                 </ul>
 
                 {languages ? <div class="languageChanger">
@@ -96,12 +110,12 @@ const generalsettings = Config.modules_enabled.general_settings
 
     btt.addEventListener('click', () =>  {
         
-        if (tt.style.visibility == "hidden" && tt.style.visibility) {
-            tt.style.visibility = "visible"
-        } else if (tt.style.visibility != "hidden" && tt.style.visibility) {
-            tt.style.visibility = "hidden"
+        if (tt.style.display == "none" && tt.style.display) {
+            tt.style.display = "block"
+        } else if (tt.style.display != "none" && tt.style.display) {
+            tt.style.display = "none"
         } else {
-            tt.style.visibility = "visible"
+            tt.style.display = "block"
         }
     });
 

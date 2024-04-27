@@ -89,7 +89,7 @@ body .btnopendiv {
 }
 
 body .openbtn {
-    visibility: hidden;
+    display: none;
 }
 
 body nav .languageChanger {
@@ -108,10 +108,10 @@ body nav .languageChanger label {
         left: 0;
         width: 12rem;
         background-color: white;
-        visibility: hidden;
+        display: none;
     }
 
     body .openbtn {
-        visibility: visible;
+        display: block;
     }
 }

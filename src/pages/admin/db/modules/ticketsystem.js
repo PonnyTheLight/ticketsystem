@@ -6,7 +6,8 @@ try {
         name varchar(50) NOT NULL,
         desc_value varchar(150) NOT NULL,
         img varchar(200),
-        active BOOL DEFAULT false
+        active BOOL DEFAULT false,
+        fecha DATE
         )`, function (error, results, fields) {
         if (error) throw error;
         return console.log("Success")
@@ -22,8 +23,7 @@ try {
     userid INT,
     event_id INT,
     used BOOLEAN DEFAULT false,
-    valid DATE,
-    qr_link varchar(200) NOT NULL
+    valid DATE NOT NULL
 );`, function (error, results, fields) {
         if (error) throw error;
         return console.log("Success")
