@@ -4,7 +4,7 @@ import {Config} from "../../settings.js";
 const create_default_user = async () => {
     const res = await dbQuery(`SELECT * from User;`);
     console.log(await res)
-    await dbQuery(`INSERT INTO User (name, email, password) VALUES ('ponny', 'contact@thisisaltawebs.com', '1234');`);
+    await dbQuery(`INSERT INTO IF NOT EXIST User (name, email, password) VALUES ('ponny', 'contact@thisisaltawebs.com', '1234');`);
     console.log('Completed Data Base with Default User.')
     return process.exit()
 }

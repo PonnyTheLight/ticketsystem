@@ -9,10 +9,13 @@ interface Props {
 const { title } = Astro.props;
 
 const test = false
-const cookies = JSON.parse(Astro.cookies.get('User').value)
-const query_response = await dbQuery(`SELECT * FROM User WHERE id='${cookies.pk}'`)
-console.log(query_response)
-const user = query_response[0]
+let user
+if (Astro.cookies.has('User')) {
+	const cookies = JSON.parse(Astro.cookies.get('User').value)
+	const query_response = await dbQuery(`SELECT * FROM User WHERE id='${cookies.pk}'`)
+	console.log(query_response)
+	user = query_response[0]
+}
 
 ---
 
