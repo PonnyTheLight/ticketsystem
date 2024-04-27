@@ -34,9 +34,8 @@ try {
 }
 
 try {
-    await dbQuery(`ALTER TABLE User ADD (
-    worker BOOLEAN DEFAULT false
-);`, function (error, results, fields) {
+    await dbQuery(`ALTER TABLE User ADD (worker BOOLEAN DEFAULT false);`,
+        function (error, results, fields) {
         if (error) throw error;
         return console.log("Success")
     });
