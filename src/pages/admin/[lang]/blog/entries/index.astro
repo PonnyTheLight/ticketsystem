@@ -4,6 +4,10 @@ import Main from "../../../layouts/Main.astro";
 import {dbQuery} from "../../../db/start/db";
 import {Config} from '../../../settings'
 
+if (!Astro.cookies.has("AdminUser")) {
+    return Astro.redirect(`/admin/${Config.default_language}/sesion/login/`);
+}
+
 
 const schema = Config.db_schema
 let entries;

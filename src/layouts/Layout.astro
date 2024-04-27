@@ -1,5 +1,6 @@
 ---
 import { ViewTransitions } from 'astro:transitions';
+import {dbQuery} from '../pages/admin/db/start/db'
 
 interface Props {
 	title: string;
@@ -8,11 +9,10 @@ interface Props {
 const { title } = Astro.props;
 
 const test = false
-const cookies = await Astro.cookies.get('User')
-let user;
-if (cookies) {
-	user = cookies
-}
+const cookies = JSON.parse(Astro.cookies.get('User').value)
+const query_response = await dbQuery(`SELECT * FROM User WHERE id='${cookies.pk}'`)
+console.log(query_response)
+const user = query_response[0]
 
 ---
 
@@ -25,6 +25,8 @@ if (cookies) {
 		<link rel="icon" type="image/svg+xml" href="/logos/LogoAltaWebs.svg" />
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
+		<!-- FONT AWESOME -->
+		<script src="https://kit.fontawesome.com/a998c7cad9.js" crossorigin="anonymous"></script>
 
 		<ViewTransitions />
 	</head>
@@ -32,7 +34,7 @@ if (cookies) {
 		<nav class="shadow-sm shadow-gray-950 flex justify-between items-center px-10">
 			<a href="/"><img class="" src="/logos/LogoAltaWebs.svg" width="150" alt="PageLogo"></a>
 
-			{user ? <a href="#" class="p-1 px-5 border-b-2 border-gray-950">Mis Entradas</a>: <a href="/sesion/login/" class="p-1 px-10 bg-blue-500 text-white rounded-full">Login</a>}
+			{user ? user.worker ? <a href="/scanner/" target="_parent" class="p-1 px-5 border-b-2 border-gray-950">Scanner</a> : <a href="#" class="p-1 px-5 border-b-2 border-gray-950">Mis Entradas</a>: <a href="/sesion/login/" class="p-1 px-10 bg-blue-500 text-white rounded-full">Login</a>}
 		</nav>
 
 		<div class="content min-h-screen">

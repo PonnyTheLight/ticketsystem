@@ -7,6 +7,11 @@ import {Config} from './settings'
 
 import { getLangFromUrl, useTranslations } from "../../i18n/utils";
 
+if (!Astro.cookies.has("AdminUser")) {
+    return Astro.redirect(`/admin/${Config.default_language}/sesion/login/`);
+}
+
+
 const lang : "en" | "es" = getLangFromUrl(Astro.url);
 let t
 function setLanguage(lang: "en"|"es") {

@@ -1,0 +1,67 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import {dbQuery} from '../../admin/db/start/db'
+
+if (!Astro.cookies.has("User")) {
+    return Astro.redirect(`/sesion/login/`);
+}
+
+const cookie = JSON.parse(Astro.cookies.get('User').value)
+const tickets_response = await dbQuery(`SELECT * FROM Tickets WHERE userid='${cookie.pk}'`)
+
+let tickets
+if (tickets_response) {
+    tickets = tickets_response
+}
+
+---
+
+<Layout title="Ticket System | Login">
+    {tickets ? tickets.map((t) => (
+            <div>
+                <div class="my-2 bg-gray-200 p-3 px-5 rounded-xl">
+                    <h1 class="mb-1 font-bold text-center">{t.name}</h1>
+                    <p class="mb-2 text-center">Esta entrada es valida hasta el {t.valid.toLocaleDateString('es-ES')}</p>
+                    <div class="flex justify-center">
+                        {!t.used ? <button class="bg-blue-500 px-4 py-1 rounded-full text-white Btn_Codigo" id={t.qr_link}>Mostrar Código</button> : <a class="bg-gray-800 px-4 py-1 rounded-full text-white">Usado</a>}
+                    </div>
+                </div>
+            </div>
+    )) : ""}
+
+
+    <div hidden class="fixed bg-opacity-90 rounded-lg top-1/4 left-0 right-0 w-full sm:w-1/2 sm:mx-auto bg-gray-300 min-h-[300px]" id=`QR-Modal`>
+        <h1 class="text-center border-b border-gray-950 my-2 flex px-10 justify-between">Mi Entrada <span class=""><button id="QR-Modal-Close">Cerrar</button></span></h1>
+
+        <img src="/" class="" id="QRImg" alt="QRImg"> <!-- Hacer solo el qr dinamico-->
+    </div>
+</Layout>
+
+
+<script>
+    function init() {
+        const buttons = document.querySelectorAll('.Btn_Codigo')
+        const modal_close = document.querySelector('#QR-Modal-Close')
+        const modal = document.querySelector('#QR-Modal')
+
+        buttons.forEach((btn) => {
+            btn.addEventListener('click', () => {
+                console.log("A")
+                const img : HTMLImageElement = document.querySelector('#QRImg')
+                img.src = btn.id
+                modal.toggleAttribute('hidden')
+            })
+        })
+
+        modal_close.addEventListener('click', () => {
+            modal.toggleAttribute('hidden')
+        })
+
+        document.addEventListener('astro:before-swap', () => {
+        }, { once: true })
+    }
+
+    init()
+
+    document.addEventListener("astro:after-swap", init)
+</script>

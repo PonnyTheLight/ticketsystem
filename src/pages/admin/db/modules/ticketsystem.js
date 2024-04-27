@@ -32,3 +32,15 @@ try {
 } catch (err) {
     console.error(err.message)
 }
+
+try {
+    await dbQuery(`ALTER TABLE User ADD (
+    worker BOOLEAN DEFAULT false
+);`, function (error, results, fields) {
+        if (error) throw error;
+        return console.log("Success")
+    });
+
+} catch (err) {
+    console.error(err.message)
+}

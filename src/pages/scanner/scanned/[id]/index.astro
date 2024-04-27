@@ -1,0 +1,75 @@
+---
+import Layout from '../../../../layouts/Layout.astro'
+import {dbQuery} from '../../../admin/db/start/db'
+
+if (!Astro.cookies.has("User")) {
+    return Astro.redirect(`/sesion/login/`);
+}
+
+const cookie = JSON.parse(Astro.cookies.get('User').value)
+const query_response = await dbQuery(`SELECT * FROM User WHERE id='${cookie.pk}'`)
+console.log(query_response)
+const user = query_response[0]
+
+if (!user.worker) {
+    return Astro.redirect(`/`);
+}
+
+const {id} = Astro.params;
+
+let today = new Date()
+let approved;
+let message;
+
+const ticket_response = await dbQuery(`SELECT * FROM Tickets WHERE id='${id}'`)
+console.log(ticket_response)
+
+if (ticket_response) {
+    const ticket = ticket_response[0]
+
+    if (!ticket.used) {
+        console.log(today.setHours(0,0,0,0))
+        console.log(ticket.valid.getTime())
+        if (today.setHours(0,0,0,0) <= ticket.valid.getTime()) {
+            approved = true
+            message = "Este ticket es totalmente valido."
+            console.log(`El ticket con id ${ticket.id} es totalmente valido.`)
+
+            const alter_response = await dbQuery(`UPDATE Tickets SET used=1 WHERE id='${id}'`)
+            console.log(alter_response)
+        } else {
+            approved = false
+            message = "Este ticket esta fuera de la fecha del evento."
+            console.log(`El ticket con id ${ticket.id} esta fuera de la fecha del evento.`)
+        }
+    } else {
+        approved = false
+        message = "Este ticket ya a sido usado anteriormente."
+        console.log(`El ticket con id ${ticket.id} ya a sido usado anteriormente.`)
+    }
+}
+---
+
+<Layout title="Ticket System | Scanned">
+    {
+        approved ? <div class="fixed top-0 left-0 bg-green-500 h-[100vh] w-full bg-opacity-55">
+            <div class="bg-green-500 px-2 py-5 mx-auto lg:w-[50%] my-5">
+                <p class="text-6xl my-12 text-center"><i class="fa-solid fa-thumbs-up fa-2xl"></i></p>
+                <h1 class="w-full mt-12 mb-2 text-2xl font-bold text-center">Aprobada la Entrada</h1>
+                { message ? <p class="text-center mb-5">{message}</p> : "" }
+                <div class="grid justify-center">
+                    <a href="/scanner/" target="_parent" class="bg-blue-500 px-4 py-2 rounded-md text-white">Continuar</a>
+                </div>
+            </div>
+        </div> : <div class="fixed top-0 left-0 bg-red-500 h-[100vh] w-full bg-opacity-55">
+            <div class="bg-red-500 px-2 py-5 mx-auto lg:w-[50%] my-5">
+                <p class="text-6xl my-12 text-center"><i class="fa-solid fa-thumbs-down fa-2xl"></i></p>
+                <h1 class="w-full mt-12 mb-2 text-2xl font-bold text-center">Denegada la Entrada.</h1>
+                { message ? <p class="text-center mb-5">{message}</p> : "" }
+                <div class="grid justify-center">
+                    <a href="/scanner/" target="_parent" class="bg-blue-500 px-4 py-2 rounded-md text-white">Continuar</a>
+                </div>
+            </div>
+        </div>
+    }
+</Layout>

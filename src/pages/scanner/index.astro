@@ -1,0 +1,49 @@
+---
+import Layout from '../../layouts/Layout.astro'
+import {dbQuery} from '../admin/db/start/db'
+
+interface User {
+    pk: number,
+    admin: boolean,
+}
+
+if (!Astro.cookies.has("User")) {
+    return Astro.redirect(`/sesion/login/`);
+}
+
+const cookie = JSON.parse(Astro.cookies.get('User').value)
+const query_response = await dbQuery(`SELECT * FROM User WHERE id='${cookie.pk}'`)
+console.log(query_response)
+const user = query_response[0]
+
+if (!user.worker) {
+    return Astro.redirect(`/`);
+}
+
+---
+
+<script src="/js/html5-qrcode.js" is:inline></script>
+<Layout title="Ticket System | Scanner">
+    <div class="mx-auto my-2 lg:max-w-[50%]" id="reader"></div>
+</Layout>
+
+<script is:inline>
+
+    const html5QrcodeScanner = new Html5QrcodeScanner(
+        "reader", { fps: 10, qrbox: 250 });
+
+    function onScanSuccess(decodedText, decodedResult) {
+        console.log(`Scan result: ${decodedText}`, decodedResult);
+        html5QrcodeScanner.clear();
+
+        return window.location.href = decodedText
+    }
+
+    function onScanError(errorMessage) {
+        console.error(errorMessage)
+        alert('A ocurrido un error: ' + errorMessage)
+    }
+
+
+    html5QrcodeScanner.render(onScanSuccess);
+</script>

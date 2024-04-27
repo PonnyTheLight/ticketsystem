@@ -1,0 +1,14 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import {dbQuery} from '../../admin/db/start/db'
+
+const cookie = Astro.cookies.get('User')
+if (cookie) {
+    console.log("Sesión cerrada")
+    Astro.cookies.delete('User', { path: "/" })
+    return Astro.redirect('/')
+} else {
+    console.log('No existe sesión')
+    return Astro.redirect('/')
+}
+---
