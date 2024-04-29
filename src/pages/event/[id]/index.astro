@@ -77,7 +77,7 @@ const event = event_response[0]
                 console.log("A")
                 const img  = document.querySelector('#QRImg')
                 img.innerHTML = ''
-                let qrcode = new QRCode(document.getElementById('QRImg'), `https://test.thisisaltawebs.com/scanner/scanned/${btn.id}/`);
+                let qrcode = new QRCode(document.getElementById('QRImg'), `/scanner/scanned/${btn.id}/`);
                 console.log(qrcode)
                 modal.toggleAttribute('hidden')
             })

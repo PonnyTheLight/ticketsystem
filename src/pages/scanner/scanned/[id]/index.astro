@@ -41,6 +41,9 @@ if (ticket_response) {
             approved = false
             message = "Este ticket esta fuera de la fecha del evento."
             console.log(`El ticket con id ${ticket.id} esta fuera de la fecha del evento.`)
+
+            const alter_response = await dbQuery(`UPDATE Tickets SET used=1 WHERE id='${id}'`)
+            console.log(alter_response)
         }
     } else {
         approved = false
