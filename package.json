@@ -3,6 +3,7 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
+    "change": "node ./change.js",
     "dev": "astro dev",
     "start": "astro dev",
     "build": "astro build",
